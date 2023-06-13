@@ -21,10 +21,10 @@ jobs:
       - run:
           name: Build Nginx Docker Image
           command: |
-            docker build -t sheikaslam/nginx-app:${CIRCLE_SHA1} .
-            docker login -u sheikaslam -p A$lam2121@
-            docker push sheikaslam/nginx-app:${CIRCLE_SHA1}
-
+            #docker build -t sheikaslam/nginx-app:${CIRCLE_SHA1} .
+            #docker login -u sheikaslam -p A$lam2121@
+            #docker push sheikaslam/nginx-app:${CIRCLE_SHA1}
+            pwd
       # Start Nginx
       - run:
           name: Start Nginx
