@@ -21,9 +21,9 @@ jobs:
       - run:
           name: Build Nginx Docker Image
           command: |
-            docker build -t sheikaslam/nginx-app:${CIRCLE_SHA1} .
+            docker build -t your-dockerhub-username/nginx-app:${CIRCLE_SHA1} .
             echo "A$lam2121@" | docker login -u "sheikaslam" --password-stdin
-            docker push sheikaslam/nginx-app:${CIRCLE_SHA1}
+            docker push your-dockerhub-username/nginx-app:${CIRCLE_SHA1}
 
       # Start Nginx
       - run:
