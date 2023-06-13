@@ -1,24 +1,21 @@
+---
 version: 2.1
-executors:
-  default:
-    docker:
-      - image: nginx:latest
-
 jobs:
   build:
-    executor: default
+    docker:
+      - image: circleci/python:3.9
+
     steps:
       - checkout
 
+      # Install Nginx
       - run:
-          name: Build Nginx Docker Image
+          name: Install Nginx
           command: |
-            docker build -t your-dockerhub-username/nginx-app:${CIRCLE_SHA1} .
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker push your-dockerhub-username/nginx-app:${CIRCLE_SHA1}
+            sudo apt-get update
+            sudo apt-get install -y nginx
 
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build
+      # Start Nginx
+      - run:
+          name: Start Nginx
+          command: sudo service nginx start
