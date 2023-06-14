@@ -21,9 +21,9 @@ jobs:
       - run:
           name: Enabling Docker
           command: |
-            sudo service docker start
-            sudo service docker enable
-            docker version}
+            sudo systemctl start docker
+            sudo systemctl docker enable
+            docker version
             
       # Build Nginx Docker Image
       - run:
