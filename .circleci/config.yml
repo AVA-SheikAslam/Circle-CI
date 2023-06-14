@@ -21,7 +21,7 @@ jobs:
           name: Check and enable Docker
           command: |
             docker version
-            service docker enable
+            sudo service docker enable
             
       # Build Nginx Docker Image
       - run:
