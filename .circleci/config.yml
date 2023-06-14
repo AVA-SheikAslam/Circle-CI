@@ -24,12 +24,12 @@ jobs:
             sudo apt-get install apt-utils
             docker version
       #Enabling Docker
-      - run:
+    # { - run:
           name: Enabling Docker
           command: |
             sudo service docker start
             sudo service docker enable
-            docker version
+            docker version}
             
       # Build Nginx Docker Image
       - run:
