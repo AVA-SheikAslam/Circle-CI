@@ -27,7 +27,7 @@ jobs:
           command: |
             docker build -t sample -f src/Dockerfile .
             echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
-            docker push sheikaslam/circleci:latest
+            docker push sheikaslam/circleci:tagname
             
       # Start Nginx
       - run:
