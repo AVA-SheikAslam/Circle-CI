@@ -17,12 +17,12 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y nginx
       #Checking Docker Version and Enabling it
-      - run:
+    # { - run:
           name: Installation of Docker
           command: |
             sudo apt update
             sudo apt-get install apt-utils
-            docker version
+            docker version }
       #Enabling Docker
     # { - run:
           name: Enabling Docker
