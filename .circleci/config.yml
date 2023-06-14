@@ -26,8 +26,7 @@ jobs:
           name: Build Nginx Docker Image
           command: |
             docker build -t sample -f src/Dockerfile .
-            echo "$DOCKERHUB_USERNAME" 
-            docker login -u $DOCKERHUB_USERNAME --password-stdin
+            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
             docker push sheikaslam/circleci:latestv1
             
       # Start Nginx
