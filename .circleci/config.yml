@@ -1,35 +1,42 @@
-on:
-  push:
-    branches:
-      - main
-
- 
+version: 2.1
+executors:
+  default:
+    docker:
+      - image: circleci/python:3.9
 
 jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
-
+  build:
+    executor: default
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - checkout
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      # Install Nginx
+      - run:
+          name: Install Nginx
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y nginx
+            
+      # Setup Docker Environment
+      - setup_remote_docker:
+          version: 20.10.7
 
-      - name: Install dependencies
-        run: |
-           npm config set registry ${{ secrets.REGISTRY_URL }}
-           npm config set registry ${{ secrets.SEMVER_URL }}
-           npm install
+      # Build Nginx Docker Image
+      - run:
+          name: Build Nginx Docker Image
+          command: |
+            docker build -t sheikaslam/circleci:${CIRCLE_SHA1} -f src/Dockerfile .
+            echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+            docker push sheikaslam/circleci:${CIRCLE_SHA1}
+            
+      # Start Nginx
+      - run:
+          name: Start Nginx
+          command: sudo service nginx start
 
-      - name: Build front-end code
-        run: npm run build
-
-      - name: Deploy to Azure Blob Storage
-        uses: azure/CLI@v1
-        with:
-          inlineScript: |
-            az storage container create --name avanpeusblobcontainer --account-name avanpeusblob --account-key mdwm1zxwnybFD32B7E/DlmVy3sE47A8YTPEE/ts8MuKPrirdiq4NNF1tjJea2uYs4lAynoH3dlK9+AStIL/gpw==
-            az storage blob upload-batch --destination avanpeusblobcontainer --source ./dist --account-name avanpeusblob --account-key mdwm1zxwnybFD32B7E/DlmVy3sE47A8YTPEE/ts8MuKPrirdiq4NNF1tjJea2uYs4lAynoH3dlK9+AStIL/gpw==
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      #
